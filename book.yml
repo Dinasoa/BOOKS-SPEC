@@ -1,0 +1,332 @@
+ openapi: '3.0.2'
+ info:
+   title: Getting scholarship
+   version: '1.0'
+ servers:
+   - url: https://api.server.test/v1
+ tags:
+   - name: Book
+   - name: Categories
+   
+ paths:
+  # /sort: 
+  #   get:
+  #     tags:
+  #       - Book
+  #     operationId: getBookSorted
+  #     summary: "Get all book sorted"
+  #     description: "Get all book sorted"
+  #     parameters: 
+  #       - name: pageSize
+  #         in: query
+  #         required: true
+  #         explode: true
+  #         schema:
+  #           type: integer
+  #       - name: pageNumber
+  #         in: query 
+  #         required: true 
+  #         explode: true 
+  #         schema:
+  #           type: integer 
+            
+  #     responses:
+  #       '200':
+  #         description: List of all book sorted
+  #         content:
+  #           application/json:
+  #             schema:
+  #               items:
+  #                 $ref: "#/components/schemas/CreateBooks"
+  #       '400':
+  #         description: Bad Request
+  #         content:
+  #           application/json:
+  #             schema:
+  #                 items:
+  #                   $ref: "#/components/schemas/BadRequestException"
+   /books:
+     get:
+       tags:
+         - Book
+       operationId: getAllBook
+       summary: "Get all book"
+       description: "Get all book"
+       parameters: 
+        - name: pageSize
+          in: query
+          required: true
+          explode: true
+          schema:
+            type: integer
+        - name: pageNumber
+          in: query 
+          required: true 
+          explode: true 
+          schema:
+            type: integer 
+            
+       responses:
+         '200':
+           description: List of all book 
+           content:
+             application/json:
+               schema:
+                 type: array 
+                 items:
+                     $ref: "#/components/schemas/CreateBooks"
+                 example:
+                 - idBook: 1
+                   title: "Elle et Lui"
+                   loansNumber: 6
+                   author: "Marc Levy"
+                   pageNumber: 620
+                   category: 
+                     categoryName: "Roman"
+                     idCategory: 1
+                   status: "available"
+                   
+                 - idBook: 2
+                   title: "Coeur cerise"
+                   loansNumber: 1
+                   author: "Cathy Cassidy"
+                   pageNumber: 600
+                   category: 
+                     categoryName: "Enfant"
+                     idCategory: 2      
+                   status: "available"
+                   
+                 - idBook: 3
+                   title: "BlackList"
+                   loansNumber: 1
+                   author: "Alyson Noel"
+                   pageNumber: 250
+                   category: 
+                     categoryName: "Roman"
+                     idCategory: 1       
+                   status: "available"
+                 
+                 - idBook: 4
+                   title: "Ugly love"
+                   loansNumber: 1
+                   author: "Collen Hoover"
+                   pageNumber: 500
+                   category: 
+                     categoryName: "Roman"
+                     idCategory: 1       
+                   status: "available"      
+                 
+         '400':
+           description: Bad Request
+           content:
+             application/json:
+               schema:
+                  items:
+                    $ref: "#/components/schemas/BadRequestException"
+     post: 
+       tags: 
+         - Book
+       operationId: createBook
+       summary: "Create book"
+       description: "Create new book"
+      
+       requestBody: 
+         required: true 
+         description: "Create new book"
+         content: 
+           application/json: 
+             schema: 
+              type: array
+              items:
+                $ref: "#/components/schemas/Books"
+  
+       responses: 
+         '200':
+           description: New book
+           content: 
+             application/json: 
+               schema: 
+                items: 
+                   $ref: "#/components/schemas/CreateBooks"
+                   
+     put: 
+       tags: 
+         - Book
+       operationId: updateBook
+       summary: "update book"
+       description: ""
+       
+       requestBody: 
+         description: ""
+         required: true
+         content: 
+           application/json: 
+             schema: 
+               type: array 
+               items: 
+                 $ref: "#/components/schemas/UpdateAllBooks"
+                 
+       responses: 
+         '200':
+           description: New Book
+           content: 
+             application/json: 
+               schema: 
+                items: 
+                   $ref: "#/components/schemas/CreateBooks"
+   
+   /book/{ids}:
+    delete: 
+      tags:
+        - Book
+      operationId: deleteMultipleBook
+      summary: "delete livre by identifier"
+      description: "books to be deleted"
+      parameters:
+        - name: ids
+          in: path
+          required: true
+          explode: true
+          schema:
+            example: [1,2,3]
+            
+      responses:
+        '200':
+          description: Ressource deleted
+          content: {}
+                
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestException'
+ 
+   /book/{id}:
+    delete: 
+      tags:
+        - Book
+      operationId: deleteBook
+      summary: "delete book by identifier"
+      description: "book to be deleted"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          explode: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Ressource deleted
+          content: {}
+                
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestException'
+ 
+   
+   /loan/{idBook}:
+    put:
+      tags: 
+        - Book 
+      operationId: LoanBook 
+      summary: "loan book"
+      description: "book to be loaned"
+      parameters: 
+        - name: idBook 
+          in: path 
+          example: 1
+          required: true 
+          schema:   
+            type: integer 
+                 
+      responses: 
+         '200':
+           description: New Book
+           content: 
+             application/json: 
+               schema: 
+                items: 
+                   $ref: "#/components/schemas/CreateBooks"
+   
+ components:
+     schemas:
+       Books: 
+        type: object 
+        properties: 
+          title: 
+            type: string 
+            example: "Les interviews"
+            
+          author: 
+            type: string 
+            example: "Hildegarde Pouffe"
+            
+          pageNumber: 
+            type: integer
+            example: 250
+        
+          category: 
+            type: object
+            example: 
+            $ref: "#/components/schemas/CreateCategories"
+     
+       UpdateAllBooks: 
+        allOf: 
+          - $ref: "#/components/schemas/Books"
+        type: object   
+        properties: 
+          idBook: 
+            type: integer 
+            example: 1
+            
+       CreateBooks: 
+        type: object
+        allOf: 
+         - $ref: '#/components/schemas/Books'
+        properties: 
+          idBook: 
+            type: integer 
+            example: 1
+          status: 
+            type: string 
+            example: "available"
+            
+          loansNumber: 
+            type: integer 
+            example: 10
+          
+       Categories: 
+        type: object 
+        properties: 
+          categoryName: 
+            type: string 
+            example: "Roman"
+            
+       CreateCategories: 
+        type: object 
+        properties: 
+          categoryId: 
+            type: integer 
+            example: 1
+        allOf: 
+          - $ref: "#/components/schemas/Categories"
+        
+          
+       BadRequestException:
+        type: object
+        properties:
+          type:
+            type: string
+            example: BadRequestException
+          message:
+            type: string
+            example: Bad_Request   
+                 
+          
+
+                    
